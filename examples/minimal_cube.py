@@ -1,5 +1,3 @@
-import bpy
-import bmesh
 import core
 from math import sin, cos, pi
 PI, TAU = pi, 2*pi
@@ -14,8 +12,8 @@ class Composition(core.scene.Scene):
         self.obj = core.geometry.cube(size=5)
 
     def draw(self):
+        # Set t to be in the range between 0 and 1
         t = self.frame / self.frames
-        x, y, z = sin(TAU*t), cos(TAU*t), 0
 
-        self.obj.location = (x, y, z)
+        # Rotate the cube for one full rotation on two rotation axis
         self.obj.rotation_euler = (0, t*TAU, t*TAU)

@@ -1,5 +1,3 @@
-import bpy
-import bmesh
 import core
 from math import sin, cos, pi
 PI, TAU = pi, 2*pi

@@ -19,9 +19,9 @@
 # ##### END LGPL LICENSE BLOCK #####
 
 
-import core.geometry
-import core.materials
-import core.scene
+from . import geometry
+from . import materials
+from . import scene
 
 import bpy
 from mathutils import Color
