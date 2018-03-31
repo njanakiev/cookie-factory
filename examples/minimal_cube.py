@@ -1,5 +1,5 @@
 import core
-from math import sin, cos, pi
+from math import pi
 PI, TAU = pi, 2*pi
 
 
