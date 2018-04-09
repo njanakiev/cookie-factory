@@ -1,4 +1,4 @@
-# Parametric Cookie
+# Cookie Factory
 
 Processing-style Scripting add-on for Blender. 
 
@@ -7,7 +7,7 @@ This add-on offers configurable scripting with Blender by running scripts in the
 
 ## Installation
 
-Download the Parametric Cookie Add-on from Github as an [archive](https://github.com/njanakiev/parametric-cookie/archive/master.zip). Go to _File > User Preferences > Addons > Install from File_ and then choose the zip-archive and activate the flag besides the Parametric Cookie Add-on.
+Download the Cookie Factory Add-on from Github as an [archive](https://github.com/njanakiev/cookie-factory/archive/master.zip). Go to _File > User Preferences > Addons > Install from File_ and then choose the zip-archive and activate the flag besides the Cookie Factory Add-on.
 
 
 ## Getting Started
@@ -46,7 +46,7 @@ You need to implement a `setup(self)` function which is called once. You can opt
 ```
 There you can access the current frame with `self.frame` and the number of frames with `self.frames`. There are many more functions to choose from within the [core](core) module and you can also access the `bpy` and `bmesh` modules, besides all the available Python modules you would have within Blender.
 
-You can run the code by loading the config file in Blender with the Parametric Cookie Toolbox as previously shown or you can run it in the background by using the command
+You can run the code by loading the config file in Blender with the Cookie Factory Toolbox as previously shown or you can run it in the background by using the command
 
 ```
 blender -b -a -- config.json
