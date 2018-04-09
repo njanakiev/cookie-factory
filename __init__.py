@@ -152,6 +152,13 @@ def import_configuration(scene, filepath):
         scene.render.threads_mode = 'FIXED'
         scene.render.threads = config['threads']
 
+    # Set render engine
+    if 'cycles' in config:
+        if config['cycles']:
+            bpy.context.scene.render.engine = 'CYCLES'
+        else:
+            bpy.context.scene.render.engine = 'BLENDER_RENDER'
+
     # Set render resolution
     width, height, percentage = 800, 800, 100
     if 'resolution' in config:
