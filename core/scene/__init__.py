@@ -65,7 +65,13 @@ class Scene(object):
         bpy_data_types = [bpy.data.objects, bpy.data.meshes, bpy.data.lamps, bpy.data.cameras, bpy.data.materials, bpy.data.curves]
         for bpy_data in bpy_data_types:
             for id_data in bpy_data:
+                if id_data.users > 0:
+                    id_data.user_clear()
                 bpy_data.remove(id_data)
+
+        # Set current frame and number of frames
+        self.frame = context.scene.frame_current
+        self.frames = context.scene.frame_end
 
         self.setup()
 
@@ -102,3 +108,53 @@ class Scene(object):
 
     def draw(self):
         pass
+
+
+class BmeshAnimation(object):
+    log = logging.getLogger('scene.BmeshAnimation')
+
+    def __init__(self, composition, frame_function=None, single_frame=True):
+        self.bmList = None
+        self.frame_function = frame_function
+        self.composition = composition
+
+        # Create object and mesh for scene
+        self.mesh = bpy.data.meshes.new("AnimationObjectMesh")
+        self.obj = bpy.data.objects.new("AnimationObject", self.mesh)
+        bpy.context.scene.objects.link(self.obj)
+
+        # Precompute all the geometry
+        if not single_frame:
+            self.bmList = []
+            for frame in range(self.composition.frames):
+                self.log.debug("Calculating geometry for frame %03i/%03i" % \
+                            (frame + 1, self.composition.frames))
+                self.bmList.append(self.frame_function(frame, self.composition.frames))
+
+        # Set frame_change_pre or render_prehandler
+        if composition.in_blender:
+            bpy.app.handlers.frame_change_pre.append(self.__frameChangeHandler)
+        else:
+            bpy.app.handlers.render_pre.append(self.__frameChangeHandler)
+
+    def __frameChangeHandler(self, scene):
+        frame = bpy.context.scene.frame_current - 1
+
+        # Clip frame number
+        if(frame < 1):
+            frame = 1
+        if(frame >= self.composition.frames):
+            frame = self.composition.frames
+
+        if(self.bmList):
+            bm = self.bmList[frame]
+            bm.to_mesh(self.mesh)
+            self.mesh.update()
+        else:
+            bm = self.frame_function(frame, self.composition.frames)
+            bm.to_mesh(self.mesh)
+            self.mesh.update()
+            bm.free()
+
+    def append_material(self, mat):
+        self.obj.data.materials.append(mat)
