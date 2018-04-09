@@ -44,11 +44,11 @@ logger = logging.getLogger(__name__)
 
 
 bl_info = {
-    'name': 'Parametric Cookie',
+    'name': 'Cookie Factory',
     'author': 'Nikolai Janakiev (njanakiev)',
     'version': (0, 1, 0),
     'blender': (2, 78, 0),
-    'location': 'View3D > Tool Shelf > Parametric Cookie',
+    'location': 'View3D > Tool Shelf > Cookie Factory',
     'description': 'Processing-style coding in Blender',
     'warning': '',
     'wiki_url': '',
@@ -59,22 +59,22 @@ bl_info = {
 
 class ImportConfigurations(bpy.types.Operator):
     bl_label = 'Import / Reload'
-    bl_idname = 'parametric_cookie.import_configuration'
+    bl_idname = 'cookie_factory.import_configuration'
     log = logging.getLogger('bpy.ops.%s' % bl_idname)
 
     def execute(self, context):
-        pc = context.scene.parametric_cookie
+        cf = context.scene.cookie_factory
         self.log.debug('Import configuraton file : {}'.format(
-                            pc.config_filepath))
+                            cf.config_filepath))
 
-        import_configuration(context.scene, pc.config_filepath)
+        import_configuration(context.scene, cf.config_filepath)
 
         return {'FINISHED'}
 
 
-class ParametricCookieRender(bpy.types.Operator):
+class CookieFactoryRender(bpy.types.Operator):
     bl_label = 'Render'
-    bl_idname = 'parametric_cookie.render'
+    bl_idname = 'cookie_factory.render'
     log = logging.getLogger('bpy.ops.%s' % bl_idname)
 
     def execute(self, context):
@@ -82,9 +82,9 @@ class ParametricCookieRender(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class ParametricCookieAnimation(bpy.types.Operator):
+class CookieFactoryAnimation(bpy.types.Operator):
     bl_label = 'Animation'
-    bl_idname = 'parametric_cookie.animation'
+    bl_idname = 'cookie_factory.animation'
     log = logging.getLogger('bpy.ops.%s' % bl_idname)
 
     def execute(self, context):
@@ -123,8 +123,8 @@ def import_configuration(scene, filepath):
         else:
             raise ValueError('Configuraton not valid')
 
-    # Get parametric_cookie configuration
-    pc = scene.parametric_cookie
+    # Get cookie_factory configuration
+    cf = scene.cookie_factory
 
     # Set render stamp
     if 'render_stamp' in config:
@@ -173,13 +173,13 @@ def import_configuration(scene, filepath):
     rnd.resolution_percentage = percentage
 
     if 'output_folder' in config:
-        pc.output_folder = config['output_folder']
+        cf.output_folder = config['output_folder']
     if 'output_name' in config:
-        pc.output_name = config['output_name']
+        cf.output_name = config['output_name']
     else:
-        pc.output_name = scene_name.split('.')[-1]
+        cf.output_name = scene_name.split('.')[-1]
     if 'override' in config:
-        pc.override = config['override']
+        cf.override = config['override']
     if 'animation' in config:
         frame_start, frame_end = 1, 100
         if 'frames' in config['animation']:
@@ -196,44 +196,44 @@ def import_configuration(scene, filepath):
         scene.frame_step = 1
 
     #  Add scenes
-    pc.scene_names.clear()
+    cf.scene_names.clear()
     for name in scene_names:
-        item = pc.scene_names.add()
+        item = cf.scene_names.add()
         item.name = name
 
     # Set scene (this calls the execute function)
-    pc.scene_name = scene_name
+    cf.scene_name = scene_name
 
 
 def render(scene, animation=False):
     logger.debug('render called')
 
-    pc = scene.parametric_cookie
-    scene_folder = os.path.dirname(pc.config_filepath)
+    cf = scene.cookie_factory
+    scene_folder = os.path.dirname(cf.config_filepath)
 
     if animation:
-        if pc.override:
+        if cf.override:
             filepath = os.path.join(scene_folder,
-                                    pc.output_name, 'frame_')
+                                    cf.output_name, 'frame_')
         else:
             output_folder = lambda idx : \
                 os.path.join(os.getcwd(),
                              scene_folder,
-                             pc.output_folder,
-                             '{}_{:04d}'.format(pc.output_name, idx))
+                             cf.output_folder,
+                             '{}_{:04d}'.format(cf.output_name, idx))
             i = 0
             while(os.path.exists(output_folder(i))): i += 1
             filepath = os.path.join(output_folder(i), 'frame_')
     else:
-        if pc.override:
+        if cf.override:
             filepath = os.path.join(scene_folder,
-                                    pc.output_folder, 'frame_')
+                                    cf.output_folder, 'frame_')
         else:
             output_file = lambda idx : \
                 os.path.join(os.getcwd(),
                              scene_folder,
-                             pc.output_folder,
-                             '{}_{:04d}.png'.format(pc.output_name, idx))
+                             cf.output_folder,
+                             '{}_{:04d}.png'.format(cf.output_name, idx))
             i = 0
             logger.debug('Filepath : {}'.format(output_file(i)))
 
@@ -285,8 +285,8 @@ def register():
 
     panel.register()
     bpy.utils.register_class(ImportConfigurations)
-    bpy.utils.register_class(ParametricCookieRender)
-    bpy.utils.register_class(ParametricCookieAnimation)
+    bpy.utils.register_class(CookieFactoryRender)
+    bpy.utils.register_class(CookieFactoryAnimation)
 
     # Register handler when Blender is run in background
     if bpy.app.background:
@@ -298,8 +298,8 @@ def unregister():
 
     panel.unregister()
     bpy.utils.unregister_class(ImportConfigurations)
-    bpy.utils.unregister_class(ParametricCookieRender)
-    bpy.utils.unregister_class(ParametricCookieAnimation)
+    bpy.utils.unregister_class(CookieFactoryRender)
+    bpy.utils.unregister_class(CookieFactoryAnimation)
 
 
 if __name__ == '__main__':

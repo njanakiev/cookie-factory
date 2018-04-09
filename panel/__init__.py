@@ -50,34 +50,34 @@ class ConfigurationPropertyGroup(bpy.types.PropertyGroup):
 
     def execute(self, context):
         self.log.debug('execute called')
-        pc = context.scene.parametric_cookie
+        cf = context.scene.cookie_factory
 
         try:
-            composition = importlib.import_module(pc.scene_name)
+            composition = importlib.import_module(cf.scene_name)
             if "composition" in locals():
                 logger.debug('reload composition')
                 importlib.reload(composition)
 
-            self.log.debug('Running ' + pc.scene_name)
+            self.log.debug('Running ' + cf.scene_name)
             comp = composition.Composition(context)
         except ImportError as e:
             self.log.error(e)
 
 
-class ParametricCookiePanel(bpy.types.Panel):
+class CookieFactoryPanel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'
-    bl_label = 'Parametric Cookie'
+    bl_label = 'Cookie Factory'
     bl_context = 'objectmode'
-    bl_category =  'Parametric Cookie'
+    bl_category =  'Cookie Factory'
 
     def draw(self, context):
         layout = self.layout
-        properties = context.scene.parametric_cookie
+        properties = context.scene.cookie_factory
 
         layout.label('Configuration')
         layout.prop(properties, 'config_filepath', text='')
-        layout.operator('parametric_cookie.import_configuration')
+        layout.operator('cookie_factory.import_configuration')
         layout.prop(properties, 'scene_name', text='')
 
         col = layout.column(align=True)
@@ -89,20 +89,20 @@ class ParametricCookiePanel(bpy.types.Panel):
         layout.prop(properties, 'override')
 
         row = layout.row(align=True)
-        row.operator('parametric_cookie.render')
-        row.operator('parametric_cookie.animation')
+        row.operator('cookie_factory.render')
+        row.operator('cookie_factory.animation')
 
 
 def register():
     bpy.utils.register_class(ConfigurationPropertyGroup)
-    bpy.types.Scene.parametric_cookie = PointerProperty(type=ConfigurationPropertyGroup)
+    bpy.types.Scene.cookie_factory = PointerProperty(type=ConfigurationPropertyGroup)
 
-    bpy.utils.register_class(ParametricCookiePanel)
+    bpy.utils.register_class(CookieFactoryPanel)
     logger.debug('panel registered')
 
 def unregister():
-    bpy.utils.unregister_class(ParametricCookiePanel)
+    bpy.utils.unregister_class(CookieFactoryPanel)
 
-    del bpy.types.Scene.parametric_cookie
+    del bpy.types.Scene.cookie_factory
     bpy.utils.unregister_class(ConfigurationPropertyGroup)
     logger.debug('panel unregistered')

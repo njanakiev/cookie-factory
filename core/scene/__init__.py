@@ -37,9 +37,9 @@ class Scene(object):
     def __init__(self, context):
         self.log.debug('__init__ called')
 
-        pc = context.scene.parametric_cookie
+        cf = context.scene.cookie_factory
         self.in_blender = not bpy.app.background
-        self.cwd = os.path.dirname(pc.config_filepath)
+        self.cwd = os.path.dirname(cf.config_filepath)
 
         # Set to object mode
         if context.active_object and context.active_object.mode == 'EDIT':
