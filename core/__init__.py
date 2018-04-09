@@ -24,6 +24,7 @@ from . import materials
 from . import scene
 
 import bpy
+import bmesh
 from mathutils import Color
 from math import sin
 import logging
@@ -97,6 +98,14 @@ def simple_scene(target_location, camera_location, sun_location, lens=35):
     sun    = lamp(sun_location, 'SUN', target=target)
 
     return target, cam, sun
+
+
+def recalc_face_normals(obj):
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(obj.data)
+    bm.free()
 
 
 def smooth_object(obj, smooth=True, subsurf=False, levels=2, render_levels=3):
