@@ -1,15 +1,13 @@
 # Cookie Factory
 
-Processing-style Scripting add-on for Blender. 
-
-This add-on offers configurable scripting with Blender by running scripts in the background or within Blender. It is particularly useful for generative animations that are fully scripted with the Blender API. This add-on evolved as a helpful tool through creating most of the pieces in the [Parametric Cookie](https://parametriccookie.tumblr.com/) Collection.
+This is a [processing](https://processing.org/)-style scripting add-on for Blender, which offers configurable Python scripting with Blender. You can run scripts in the background or within Blender and it offers various helper functions and classes to make quick and more involved sketches and animations. It is particularly useful for generative animations that are fully scripted with the Blender API. This add-on evolved from the various modules and functions used to create most of the pieces in the [Parametric Cookie](https://parametriccookie.tumblr.com/) Collection.
 
 ![Parametric Cookie](parametric_cookie.png)
 
 
 ## Installation
 
-Download the Cookie Factory Add-on from Github as an [archive](https://github.com/njanakiev/cookie-factory/archive/master.zip). Go to _File > User Preferences > Addons > Install from File_ and then choose the zip-archive and activate the flag besides the Cookie Factory Add-on.
+Download the Cookie Factory Add-on from Github as an [archive](https://github.com/njanakiev/cookie-factory/archive/master.zip). Next, open Blender and go to _File > User Preferences > Addons > Install from File_ and then choose the zip-archive and activate the flag besides the Cookie Factory Add-on.
 
 
 ## Getting Started
@@ -58,7 +56,7 @@ to render animations. In order to render single frames use the command
 ```
 blender -b -f 1 -- config.json
 ```
-When rendering animation or single frame, the frames are rendered in the specified `output_folder` folder from the config.json and there the frames are rendered to a folder or an image with the name of the scene for animation and single frame render respectively. If you want the frames or the animation folder to be overwritten you can use the `override` option in the config.json.
+When rendering animation or a single frame, the frames are rendered in the specified `output_folder` folder from the config.json and there the frames are rendered to a folder or an image with the name of the scene for animation and single frame render respectively. If you want the frames or the animation folder to be overwritten you can use the `override` option in the config.json.
 
 ## License
 
