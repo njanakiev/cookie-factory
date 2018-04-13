@@ -4,6 +4,8 @@ Processing-style Scripting add-on for Blender.
 
 This add-on offers configurable scripting with Blender by running scripts in the background or within Blender. It is particularly useful for generative animations that are fully scripted with the Blender API. This add-on evolved as a helpful tool through creating most of the pieces in the [Parametric Cookie](https://parametriccookie.tumblr.com/) Collection.
 
+![Parametric Cookie](parametric_cookie.png)
+
 
 ## Installation
 
